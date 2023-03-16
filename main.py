@@ -69,12 +69,16 @@ while RUNNING:
             # break
     # print(get_mouse_now())
     ### update section of game loop (if updates take longer the 1/30th of a second, you will get laaaaag...)
+    enemies.update()
     all_sprites.update()
 
+    # if player hits enemies
     blocks_hit_list = pg.sprite.spritecollide(player, enemies, True)
+    
     for block in blocks_hit_list:
-        # print(enemies)
+        print(block)
         pass
+    
     ### draw and render section of game loop
     screen.fill(BLUE)
     all_sprites.draw(screen)
