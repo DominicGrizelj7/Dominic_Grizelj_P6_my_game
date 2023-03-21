@@ -13,3 +13,4 @@ RUNNING = True
 RED = (250, 50, 50)
 GREEN = (50, 250, 50)
 SCORE = 0
+PAUSED = False

@@ -40,10 +40,16 @@ class Player(Sprite):
             self.vel.x = 0
             print("i am off the right side of the screen...")
         if self.rect.x < 0:
+            self.pos.x = 25
+            self.vel.x = 0
             print("i am off the left side of the screen...")
         if self.rect.y > HEIGHT:
+            self.pos.y = WIDTH - 25
+            self.vel.y = 0
             print("i am off the bottom of the screen")
         if self.rect.y < 0:
+            self.pos.y = 25
+            self.vel.y = 0
             print("i am off the top of the screen...")
 
     def update(self):

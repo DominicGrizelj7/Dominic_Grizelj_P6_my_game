@@ -34,9 +34,17 @@ screen = pg.display.set_mode((WIDTH, HEIGHT))
 pg.display.set_caption("My first game...")
 clock = pg.time.Clock() 
 
+
+
+
 # what are those
+# manages sprites and update entire groups 
 all_sprites = pg.sprite.Group()
 enemies = pg.sprite.Group()
+
+
+
+
 
 player = Player()
 
@@ -45,7 +53,7 @@ player.pos = (0,0)
 
 # creates a for loop that creates 20 mobs
 # 
-for i in range(0,15):
+for i in range(0, 25):
     # instantiate mobs
     m = Mob(randint(30,90), randint(30, 90))
     # add enemies to enemies and all_sprites...
@@ -66,8 +74,21 @@ while RUNNING:
             # break
     # print(get_mouse_now())
     ### update section of game loop (if updates take longer the 1/30th of a second, you will get laaaaag...)
-    enemies.update()
-    all_sprites.update()
+
+
+    keystate = pg.key.get_pressed()
+    if keystate[pg.K_ESCAPE]:
+        PAUSED = True
+
+    if not PAUSED:
+        all_sprites.update()
+        enemies.update()
+    elif PAUSED == True:
+        if keystate[pg.K_ESCAPE]:
+            PAUSED = False
+
+
+
 
     # if player hits enemies
     blocks_hit_list = pg.sprite.spritecollide(player, enemies, True)
@@ -78,7 +99,6 @@ while RUNNING:
         print(block)
         pass
 
-       
     ### draw and render section of game loop
     screen.fill(BLUE)
     def draw_text(text, size, color, x, y):
