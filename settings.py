@@ -1,7 +1,7 @@
 # File created by Dominic Grizelj
 WIDTH = 800
 HEIGHT = 600
-PLAYER_ACC = 2
+PLAYER_ACC = 0.8
 PLAYER_FRICTION = -0.3
 MOB_ACC =1
 MOB_FRICTION = -0.3
@@ -12,5 +12,6 @@ FPS = 60
 RUNNING = True
 RED = (250, 50, 50)
 GREEN = (50, 250, 50)
+BLUE = (50, 50, 250)
 SCORE = 0
 PAUSED = False
