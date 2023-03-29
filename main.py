@@ -16,8 +16,8 @@ from sprites import *
 game_folder = os.path.dirname(__file__)
 img_folder = os.path.join(game_folder, "img")
 
-# create game class in order to pass properties to the sprites file
-
+# create game class in order to pass properties to the sprites file and to organize
+# class has properties and set methods which allow sprites to do different things
 class Game:
     def __init__(self):
         # init game window etc.
@@ -35,6 +35,8 @@ class Game:
         self.platforms = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         self.player = Player(self)
+        self.plat1 = Platform(WIDTH, 50, 0, HEIGHT-50, (150,150,150))
+        self.all_sprites.add(self.plat1)
         self.all_sprites.add(self.player)
         for i in range(0,10):
             m = Mob(20,20,(0,255,0))
@@ -58,7 +60,6 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
                     self.player.jump()
-    
     def update(self):
         self.all_sprites.update()
     def draw(self):
@@ -77,8 +78,10 @@ class Game:
         x,y = pg.mouse.get_pos()
         return (x,y)
 
+# instantiate the game class...
 g = Game()
 
+# kick off the game loop
 while g.running:
     g.new()
 
