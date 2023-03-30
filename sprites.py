@@ -12,7 +12,6 @@ class Player(Sprite):
     def __init__(self, game):
         Sprite.__init__(self)
         # these are the properties
-        # not capitalized bc talks back and forth with seperate files
         self.game = game
         self.image = pg.Surface((50,50))
         self.image.fill(BLACK)
@@ -25,12 +24,12 @@ class Player(Sprite):
         self.canjump = False
     def input(self):
         keystate = pg.key.get_pressed()
-        if keystate[pg.K_w]:
-            self.acc.y = -PLAYER_ACC
+        # if keystate[pg.K_w]:
+        #     self.acc.y = -PLAYER_ACC
         if keystate[pg.K_a]:
             self.acc.x = -PLAYER_ACC
-        if keystate[pg.K_s]:
-            self.acc.y = PLAYER_ACC
+        # if keystate[pg.K_s]:
+        #     self.acc.y = PLAYER_ACC
         if keystate[pg.K_d]:
             self.acc.x = PLAYER_ACC
         # if keystate[pg.K_p]:
@@ -42,7 +41,11 @@ class Player(Sprite):
         #         print(PAUSED)
     # ...
     def jump(self):
+        self.rect.x += 1
         hits = pg.sprite.spritecollide(self, self.game.platforms, False)
+        self.rect.x -= 1
+        # if hits:
+        self.vel.y = -PLAYER_JUMP
     
     def inbounds(self):
         if self.rect.x > WIDTH - 50:
@@ -64,15 +67,12 @@ class Player(Sprite):
                 self.game.score += 1
                 print(SCORE)
     def update(self):
-        self.mob_collide()
-        self.inbounds()
-        self.acc = (0, PLAYER_GRAV)
-        # self.acc = self.vel * PLAYER_FRICTION
+        self.acc = vec(0, PLAYER_GRAV)
+        self.acc.x = self.vel.x * PLAYER_FRICTION
         self.input()
         self.vel += self.acc
-        # self.pos += self.vel + 0.5 * self.acc
-        self.rect.center = self.pos
-
+        self.pos += self.vel + 0.5 * self.acc
+        self.rect.midbottom = self.pos
 
 class Mob(Sprite):
     def __init__(self,width,height, color):
@@ -109,10 +109,10 @@ class Mob(Sprite):
         self.pos += self.vel
         self.rect.center = self.pos
 
-# platform class
+# create a new platform class...
 
 class Platform(Sprite):
-    def __init__(self, width, height, x, y, color):
+    def __init__(self, x, y, width, height, color, variant):
         Sprite.__init__(self)
         self.width = width
         self.height = height
@@ -122,4 +122,4 @@ class Platform(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-
+        self.variant = variant
