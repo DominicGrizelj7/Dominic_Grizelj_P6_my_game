@@ -7,10 +7,25 @@
 # import libs
 import pygame as pg
 import os
+import math
 # import settings 
 from settings import *
 from sprites import *
+
 # from pg.sprite import Sprite
+
+'''
+
+My goal is to...
+ make boundaries 
+ have the game stop/lose if you collide with a sprite 
+ reach goal: have a timer and retry screen to get a score.
+
+'''
+
+
+
+
 
 # set up assets folders
 game_folder = os.path.dirname(__file__)
@@ -19,6 +34,31 @@ img_folder = os.path.join(game_folder, "img")
 # create game class in order to pass properties to the sprites file and to organize
 # class has properties and set methods which allow sprites to do different things
 class Game:
+    def clock():
+        window = pg.display.set_mode((200, 200))
+        clock = pg.time.Clock()
+        font = pg.font.SysFont(None, 100)
+        counter = 10
+        text = font.render(str(counter), True, (0, 128, 0))
+        timer_event = pg.USEREVENT+1
+        pg.time.set_timer(timer_event, 1000)
+        run = True
+        while run:
+            clock.tick(60)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    run = False
+                elif event.type == timer_event:
+                    counter -= 1
+                    text = font.render(str(counter), True, (0, 128, 0))
+                    if counter == 0:
+                # pg.time.set_timer(timer_event, 0) 
+                        pg.quit()    
+                        exit()          
+            window.fill((0, 0, 0))
+            text_rect = text.get_rect(center = window.get_rect().center)
+            window.blit(text, text_rect)
+            pg.display.flip()
     def __init__(self):
         # init game window etc.
         pg.init()
@@ -73,12 +113,8 @@ class Game:
         if self.player.vel.y > 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
             if hits:
-                if hits[0].variant == "dissapearing":
+                if hits[0].variant == "disappearing":
                     hits[0].kill()
-                elif hits[0].variant == "icey":
-                    self.player.pos.y = hits[0].rect.top
-                    self.player.vel.y = 0
-                    PLAYER_FRICTION = 0
                 elif hits[0].variant == "bouncey":
                     self.player.pos.y = hits[0].rect.top
                     self.player.vel.y = -PLAYER_JUMP
@@ -102,11 +138,45 @@ class Game:
         x,y = pg.mouse.get_pos()
         return (x,y)
 
+    '''' 
+pg.init()
+window = pg.display.set_mode((200, 200))
+clock = pg.time.Clock()
+font = pg.font.SysFont(None, 100)
+counter = 10
+text = font.render(str(counter), True, (0, 128, 0))
+timer_event = pg.USEREVENT+1
+pg.time.set_timer(timer_event, 1000)
+run = True
+while run:
+    clock.tick(60)
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            run = False
+        elif event.type == timer_event:
+            counter -= 1
+            text = font.render(str(counter), True, (0, 128, 0))
+            if counter == 0:
+                # pg.time.set_timer(timer_event, 0) 
+                pg.quit()    
+                exit()          
+    window.fill((0, 0, 0))
+    text_rect = text.get_rect(center = window.get_rect().center)
+    window.blit(text, text_rect)
+    pg.display.flip()
+''' 
+
 # instantiate the game class...
 g = Game()
 
 # kick off the game loop
 while g.running:
     g.new()
+
+
+
+pg.quit()
+exit()
+
 
 pg.quit()
