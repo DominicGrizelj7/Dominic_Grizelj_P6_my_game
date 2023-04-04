@@ -57,15 +57,20 @@ class Player(Sprite):
             self.vel.x = 0
             print("i am off the left side of the screen...")
         if self.rect.y > HEIGHT:
+            self.pos.y = HEIGHT -25
+            self.vel.y = 0
+            
             print("i am off the bottom of the screen")
         if self.rect.y < 0:
+            self.pos.y = 50
+            self.vel.y = 0
             print("i am off the top of the screen...")
     def mob_collide(self):
             hits = pg.sprite.spritecollide(self, self.game.enemies, True)
             if hits:
                 print("you collided with an enemy...")
-                self.game.score += 1
-                print(SCORE)
+                # self.game.score += 1
+                # print(SCORE)
     def update(self):
         self.acc = vec(0, PLAYER_GRAV)
         self.acc.x = self.vel.x * PLAYER_FRICTION
@@ -73,6 +78,7 @@ class Player(Sprite):
         self.vel += self.acc
         self.pos += self.vel + 0.5 * self.acc
         self.rect.midbottom = self.pos
+        self.inbounds()
 
 class Mob(Sprite):
     def __init__(self,width,height, color):

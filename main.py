@@ -11,6 +11,7 @@ import math
 # import settings 
 from settings import *
 from sprites import *
+from math import floor
 
 # from pg.sprite import Sprite
 
@@ -18,47 +19,32 @@ from sprites import *
 
 My goal is to...
  make boundaries 
- have the game stop/lose if you collide with a sprite 
- reach goal: have a timer and retry screen to get a score.
+ reach goal: have the game stop/lose if you collide with a sprite and have a timer and retry screen to get a score.
 
 '''
-
-
-
 
 
 # set up assets folders
 game_folder = os.path.dirname(__file__)
 img_folder = os.path.join(game_folder, "img")
 
+
+
+class Cooldown():
+        def __init__(self):
+            self.current_time = 0
+            self.event_time = 0
+        def ticking(self):
+            self.current_time = floor((pg.time.get_ticks())/1000)
+            self.delta = self.current_time - self.event_time
+        def timer(self):
+            self.current_time = floor((pg.time.get_ticks())/1000)
+
+
 # create game class in order to pass properties to the sprites file and to organize
 # class has properties and set methods which allow sprites to do different things
 class Game:
-    def clock():
-        window = pg.display.set_mode((200, 200))
-        clock = pg.time.Clock()
-        font = pg.font.SysFont(None, 100)
-        counter = 10
-        text = font.render(str(counter), True, (0, 128, 0))
-        timer_event = pg.USEREVENT+1
-        pg.time.set_timer(timer_event, 1000)
-        run = True
-        while run:
-            clock.tick(60)
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    run = False
-                elif event.type == timer_event:
-                    counter -= 1
-                    text = font.render(str(counter), True, (0, 128, 0))
-                    if counter == 0:
-                # pg.time.set_timer(timer_event, 0) 
-                        pg.quit()    
-                        exit()          
-            window.fill((0, 0, 0))
-            text_rect = text.get_rect(center = window.get_rect().center)
-            window.blit(text, text_rect)
-            pg.display.flip()
+    
     def __init__(self):
         # init game window etc.
         pg.init()
@@ -68,6 +54,8 @@ class Game:
         self.clock = pg.time.Clock()
         self.running = True
         print(self.screen)
+        self.font_name = pg.font.match_font(FONT)
+    
     def new(self):
         # starting a new game
         self.score = 0
@@ -78,9 +66,7 @@ class Game:
         self.plat1 = Platform(WIDTH, 50, 0, HEIGHT-50, (150,150,150), "normal")
         # self.plat1 = Platform(WIDTH, 50, 0, HEIGHT-50, (150,150,150), "normal")
         self.all_sprites.add(self.plat1)
-
         self.platforms.add(self.plat1)
-        
         self.all_sprites.add(self.player)
         for plat in PLATFORM_LIST:
             p = Platform(*plat)
@@ -90,7 +76,10 @@ class Game:
             m = Mob(20,20,(0,255,0))
             self.all_sprites.add(m)
             self.enemies.add(m)
+        self.cd = Cooldown()
+        self.cd.timer()
         self.run()
+
     def run(self):
         self.playing = True
         while self.playing:
@@ -99,17 +88,10 @@ class Game:
             self.update()
             self.draw()
     
-    def events(self):
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                if self.playing:
-                    self.playing = False
-                self.running = False
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    self.player.jump()
     def update(self):
         self.all_sprites.update()
+        self.cd.ticking()
+        # print(pg.time.get_ticks())
         if self.player.vel.y > 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
             if hits:
@@ -122,50 +104,33 @@ class Game:
                     self.player.pos.y = hits[0].rect.top
                     self.player.vel.y = 0
 
+    def events(self):
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                if self.playing:
+                    self.playing = False
+                self.running = False
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    self.player.jump()
+
     def draw(self):
         self.screen.fill(BLUE)
         self.all_sprites.draw(self.screen)
+        self.draw_text(str(self.cd.delta), 22, WHITE, WIDTH / 2, 15)
         # is this a method or a function?
         pg.display.flip()
+
     def draw_text(self, text, size, color, x, y):
-        font_name = pg.font.match_font('arial')
+        font_name = pg.font.match_font('G')
         font = pg.font.Font(font_name, size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x,y)
         self.screen.blit(text_surface, text_rect)
-    def get_mouse_now(self):
-        x,y = pg.mouse.get_pos()
-        return (x,y)
 
-    '''' 
-pg.init()
-window = pg.display.set_mode((200, 200))
-clock = pg.time.Clock()
-font = pg.font.SysFont(None, 100)
-counter = 10
-text = font.render(str(counter), True, (0, 128, 0))
-timer_event = pg.USEREVENT+1
-pg.time.set_timer(timer_event, 1000)
-run = True
-while run:
-    clock.tick(60)
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
-            run = False
-        elif event.type == timer_event:
-            counter -= 1
-            text = font.render(str(counter), True, (0, 128, 0))
-            if counter == 0:
-                # pg.time.set_timer(timer_event, 0) 
-                pg.quit()    
-                exit()          
-    window.fill((0, 0, 0))
-    text_rect = text.get_rect(center = window.get_rect().center)
-    window.blit(text, text_rect)
-    pg.display.flip()
-''' 
 
+    
 # instantiate the game class...
 g = Game()
 

@@ -15,6 +15,9 @@ FPS = 60
 RUNNING = True
 SCORE = 0
 PAUSED = False
+FONT = "G"
+
+
 
 # Starting platforms
 PLATFORM_LIST = [(0, HEIGHT - 40, WIDTH, 40, (200,200,200), "normal"),
