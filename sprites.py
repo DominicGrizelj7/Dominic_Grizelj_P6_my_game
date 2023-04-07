@@ -17,7 +17,7 @@ class Player(Sprite):
         self.image.fill(BLACK)
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH/2, HEIGHT/2)
-        self.pos = vec(WIDTH/2, HEIGHT/2)
+        self.pos = vec(WIDTH/3, HEIGHT/3)
         self.vel = vec(0,0)
         self.acc = vec(0,0)
         self.cofric = 0.1
@@ -65,12 +65,12 @@ class Player(Sprite):
             self.pos.y = 50
             self.vel.y = 0
             print("i am off the top of the screen...")
-    def mob_collide(self):
-            hits = pg.sprite.spritecollide(self, self.game.enemies, True)
-            if hits:
-                print("you collided with an enemy...")
-                # self.game.score += 1
-                # print(SCORE)
+    # def mob_collide(self):
+    #         hits = pg.sprite.spritecollide(self, self.game.enemies, True)
+    #         if hits:
+    #             print("you collided with an enemy...")
+    #             self.game.score += 1
+    #             print(SCORE)
     def update(self):
         self.acc = vec(0, PLAYER_GRAV)
         self.acc.x = self.vel.x * PLAYER_FRICTION

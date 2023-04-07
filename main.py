@@ -13,6 +13,8 @@ from settings import *
 from sprites import *
 from math import floor
 
+
+
 # from pg.sprite import Sprite
 
 '''
@@ -73,7 +75,7 @@ class Game:
             self.all_sprites.add(p)
             self.platforms.add(p)
         for i in range(0,10):
-            m = Mob(20,20,(0,255,0))
+            m = Mob(20,20,(250,0,0))
             self.all_sprites.add(m)
             self.enemies.add(m)
         self.cd = Cooldown()
@@ -103,6 +105,16 @@ class Game:
                 else:
                     self.player.pos.y = hits[0].rect.top
                     self.player.vel.y = 0
+        if RUNNING == True:
+            hit = pg.sprite.spritecollide(self.player, self.enemies, False)
+            if hit:
+                print("you hit enemy")
+                pg.quit()
+
+
+                
+
+
 
     def events(self):
         for event in pg.event.get():
