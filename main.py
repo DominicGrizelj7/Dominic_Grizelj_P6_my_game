@@ -31,7 +31,7 @@ game_folder = os.path.dirname(__file__)
 img_folder = os.path.join(game_folder, "img")
 
 
-
+# CLOCK
 class Cooldown():
         def __init__(self):
             self.current_time = 0
@@ -74,7 +74,7 @@ class Game:
             p = Platform(*plat)
             self.all_sprites.add(p)
             self.platforms.add(p)
-        for i in range(0,10):
+        for i in range(0,7):
             m = Mob(20,20,(250,0,0))
             self.all_sprites.add(m)
             self.enemies.add(m)
@@ -105,6 +105,7 @@ class Game:
                 else:
                     self.player.pos.y = hits[0].rect.top
                     self.player.vel.y = 0
+# if the sprite collides with mob sprite than the program quits
         if RUNNING == True:
             hit = pg.sprite.spritecollide(self.player, self.enemies, False)
             if hit:
@@ -129,10 +130,12 @@ class Game:
     def draw(self):
         self.screen.fill(BLUE)
         self.all_sprites.draw(self.screen)
+# drawing the clock
         self.draw_text(str(self.cd.delta), 22, WHITE, WIDTH / 2, 15)
         # is this a method or a function?
         pg.display.flip()
 
+# this is the text for the clock
     def draw_text(self, text, size, color, x, y):
         font_name = pg.font.match_font('G')
         font = pg.font.Font(font_name, size)
@@ -157,3 +160,6 @@ exit()
 
 
 pg.quit()
+
+
+# 108, 133, 138

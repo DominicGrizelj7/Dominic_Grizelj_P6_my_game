@@ -46,7 +46,7 @@ class Player(Sprite):
         self.rect.x -= 1
         # if hits:
         self.vel.y = -PLAYER_JUMP
-    
+# defines boundaries by setting the velocity to 0 once the sprite goes near off the screen
     def inbounds(self):
         if self.rect.x > WIDTH - 50:
             self.pos.x = WIDTH - 25
@@ -94,7 +94,6 @@ class Mob(Sprite):
         self.vel = vec(randint(1,5),randint(1,5))
         self.acc = vec(1,1)
         self.cofric = 0.01
-    # ...
     def inbounds(self):
         if self.rect.x > WIDTH:
             self.vel.x *= -1
@@ -115,7 +114,6 @@ class Mob(Sprite):
         self.pos += self.vel
         self.rect.center = self.pos
 
-# create a new platform class...
 
 class Platform(Sprite):
     def __init__(self, x, y, width, height, color, variant):
@@ -129,3 +127,7 @@ class Platform(Sprite):
         self.rect.x = x
         self.rect.y = y
         self.variant = variant
+
+
+
+    # 49,
