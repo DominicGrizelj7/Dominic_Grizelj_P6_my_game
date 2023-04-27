@@ -2,7 +2,7 @@
 # gIT GITHUB    
 # Build file and folder structures
 # Create libraries
-# testing github changes
+# testing github changesd
 # I changed something - I changed something else tooooo!
 # import libs
 import pygame as pg
